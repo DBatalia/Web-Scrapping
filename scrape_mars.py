@@ -155,46 +155,47 @@ def scrape_mars_facts():
 # Dictionary entry from MARS FACTS
      mars_info['mars_facts'] = data
      return mars_info
-
-
-# Mars hemisphere
-def scrape_mars_hemisphere():
-    try:
-        mars_hemisphere():
-        hemispheres_url = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
-        browser.visit(hemispheres_url)
-        html = browser.html
-        soup = BeautifulSoup(html, "html.parser")
-        mars_hemispheres = []
-
-        products = soup.find("div", class_="result-list")
-        hemispheres = products.find_all("div", class_="item")
-        for hemisphere in hemispheres:
-        title = hemisphere.find("h3").text
-        title = title.replace("Enhanced", "")
-        end_link = hemisphere.find("a")["href"]
-        image_link = "https://astrogeology.usgs.gov/" + end_link
-        browser.visit(image_link)
-        html = browser.html
-        soup = BeautifulSoup(html, "html.parser")
-        downloads = soup.find("div", class_="downloads")
-        image_url = downloads.find("a")["href"]
-        mars_hemisphere.append({"title": title, "img_url": image_url})
-        mars_hemisphere.append({"title": title, "img_url": image_url})
-        return mars_hemispheres
     finally:
-            browser.quit()
+        browser.quit()
+
+# def scrape_mars_hemisphere():
+
+#     try:
+
+#         browser = init_browser()
+#         hemispheres_url = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
+#         browser.visit(hemispheres_url)
+#         html = browser.html
+#         soup = bs(html, "html.parser")
+#         mars_hemisphere = []
+
+#         products = soup.find("div", class_="result-list")
+#         hemispheres = products.find_all("div", class_="item")
+#         for hemisphere in hemispheres:
+#             title = hemisphere.find("h3").text
+#             title = title.replace("Enhanced", "")
+#             end_link = hemisphere.find("a")["href"]
+#             image_link = "https://astrogeology.usgs.gov/" + end_link
+#             browser.visit(image_link)
+#             html = browser.html
+#             soup = bs(html, "html.parser")
+#             downloads = soup.find("div", class_="downloads")
+#             image_url = downloads.find("a")["href"]
+#             mars_hemispheres.append({"title": title, "img_url": image_url})
+#               return mars_hemisphere
+#     finally:
+#             browser.quit()
 
 # print(scrape_mars_news())
 # print(scrape_mars_image())
 # print(scrape_mars_weather())
 # print(scrape_mars_facts())
-# print(scrape_mars_hemispheres())
+# print(scrape_mars_hemisphere())
 def return_scrape():
     scrape_mars_news()
     scrape_mars_image()
     scrape_mars_weather()
     scrape_mars_facts()
-    scrape_mars_hemispheres()
+    # scrape_mars_hemispheres()
     return mars_info
 # In[ ]:

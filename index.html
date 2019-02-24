@@ -13,7 +13,7 @@
 
 </head>
 
-<body class="text-white" style="background-color:rgb(197, 137, 25);">
+<body class="text-blue" style="background-color:rgb(240, 235, 227);">
     <div class="container">
 
         <!-- Jumbotron -->
@@ -44,7 +44,7 @@
                     <div class="card" style="width: 18rem;color: rgb(165, 157, 42)">
                         <div class="card-body text-white bg-dark">
                             <h6 class="card-title">Current Weather on Mars</h6>
-                            <p class="card-text">{{ mars_info.weather_tweet }}</p>
+                            <p class="card-text">{{ mars_info.mars_weather }}</p>
                         </div>
 
                     </div>
@@ -65,7 +65,7 @@
             <hr>
             <div class="col-md-12">
                 <div class="row">
-                    {% for item in mars_info.hiu %}
+                    {% for item in mars_info.mars_hemisphere %}
                     <div class="col-md-6">
                         <div class="card text-white bg-dark" style="margin: 30px;">
                             <img class="card-img-top" src="{{ item.img_url }}" />
