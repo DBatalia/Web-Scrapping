@@ -134,27 +134,29 @@ def scrape_mars_weather():
 # Mars Facts
 def scrape_mars_facts():
     try:
+         # Initialize browser
+        browser = init_browser()
     # Visit Mars facts url
-     facts_url = 'http://space-facts.com/mars/'
+        facts_url = 'http://space-facts.com/mars/'
 
 # Use Panda's `read_html` to parse the url
-     mars_facts = pd.read_html(facts_url)
+        mars_facts = pd.read_html(facts_url)
 
 # Find the mars facts DataFrame in the list of DataFrames as assign it to `mars_df`
-     mars_df = mars_facts[0]
+        mars_df = mars_facts[0]
 
 # Assign the columns `['Description', 'Value']`
-     mars_df.columns = ['Description', 'Value']
+        mars_df.columns = ['Description', 'Value']
 
 # Set the index to the `Description` column without row indexing
-     mars_df.set_index('Description', inplace=True)
+        mars_df.set_index('Description', inplace=True)
 
 # Save html code to folder Assets
-     data = mars_df.to_html()
+        data = mars_df.to_html()
 
 # Dictionary entry from MARS FACTS
-     mars_info['mars_facts'] = data
-     return mars_info
+        mars_info['mars_facts'] = data
+        return mars_info
     finally:
         browser.quit()
 
@@ -181,21 +183,21 @@ def scrape_mars_facts():
 #             soup = bs(html, "html.parser")
 #             downloads = soup.find("div", class_="downloads")
 #             image_url = downloads.find("a")["href"]
-#             mars_hemispheres.append({"title": title, "img_url": image_url})
-#               return mars_hemisphere
+#             mars_hemisphere.append({"title": title, "img_url": image_url})
+#             return mars_hemisphere
 #     finally:
 #             browser.quit()
 
-# print(scrape_mars_news())
-# print(scrape_mars_image())
-# print(scrape_mars_weather())
-# print(scrape_mars_facts())
-# print(scrape_mars_hemisphere())
+print(scrape_mars_news())
+print(scrape_mars_image())
+print(scrape_mars_weather())
+print(scrape_mars_facts())
+#print(scrape_mars_hemisphere())
 def return_scrape():
     scrape_mars_news()
     scrape_mars_image()
     scrape_mars_weather()
     scrape_mars_facts()
-    # scrape_mars_hemispheres()
+    #scrape_mars_hemisphere()
     return mars_info
 # In[ ]:
