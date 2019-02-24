@@ -133,97 +133,63 @@ def scrape_mars_weather():
 
 # Mars Facts
 def scrape_mars_facts():
-
+    try:
     # Visit Mars facts url
-    facts_url = 'http://space-facts.com/mars/'
+     facts_url = 'http://space-facts.com/mars/'
 
 # Use Panda's `read_html` to parse the url
-    mars_facts = pd.read_html(facts_url)
+     mars_facts = pd.read_html(facts_url)
 
 # Find the mars facts DataFrame in the list of DataFrames as assign it to `mars_df`
-    mars_df = mars_facts[0]
+     mars_df = mars_facts[0]
 
 # Assign the columns `['Description', 'Value']`
-    mars_df.columns = ['Description', 'Value']
+     mars_df.columns = ['Description', 'Value']
 
 # Set the index to the `Description` column without row indexing
-    mars_df.set_index('Description', inplace=True)
+     mars_df.set_index('Description', inplace=True)
 
 # Save html code to folder Assets
-    data = mars_df.to_html()
+     data = mars_df.to_html()
 
 # Dictionary entry from MARS FACTS
-    mars_info['mars_facts'] = data
-    return mars_info
+     mars_info['mars_facts'] = data
+     return mars_info
+
 
 # Mars hemisphere
-
-
-def scrape_mars_hemispheres():
-
+def scrape_mars_hemisphere():
     try:
-
-        # Initialize browser
-        browser = init_browser()
-
-        # Visit hemispheres website through splinter module
-        hemispheres_url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
+        mars_hemisphere():
+        hemispheres_url = "https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars"
         browser.visit(hemispheres_url)
+        html = browser.html
+        soup = BeautifulSoup(html, "html.parser")
+        mars_hemispheres = []
 
-        # HTML Object
-        html_hemispheres = browser.html
-
-        # Parse HTML with Beautiful Soup
-        soup = bs(html_hemispheres, 'html.parser')
-
-        # Retreive all items that contain mars hemispheres information
-        items = soup.find_all('div', class_='item')
-
-        # Create empty list for hemisphere urls
-        hemis = []
-
-        # Store the main_ul
-        hemispheres_main_url = 'https://astrogeology.usgs.gov'
-
-        # Loop through the items previously stored
-        for i in items:
-            # Store title
-            title = i.find('h3').text
-
-            # Store link that leads to full image website
-            partial_img_url = i.find(
-                'a', class_='itemLink product-item')['href']
-
-            # Visit the link that contains the full image website
-            browser.visit(hemispheres_main_url + partial_img_url)
-
-            # HTML Object of individual hemisphere information website
-            partial_img_html = browser.html
-
-            # Parse HTML with Beautiful Soup for every individual hemisphere information website
-            soup = bs(partial_img_html, 'html.parser')
-
-            # Retrieve full image source
-            img_url = hemispheres_main_url + \
-                soup.find('img', class_='wide-image')['src']
-
-            # Append the retreived information into a list of dictionaries
-            hemis.append({"title": title, "img_url": img_url})
-
-        mars_info['hemis'] = hemis
-
-        # Return mars_data dictionary
-
-        return mars_info
+        products = soup.find("div", class_="result-list")
+        hemispheres = products.find_all("div", class_="item")
+        for hemisphere in hemispheres:
+        title = hemisphere.find("h3").text
+        title = title.replace("Enhanced", "")
+        end_link = hemisphere.find("a")["href"]
+        image_link = "https://astrogeology.usgs.gov/" + end_link
+        browser.visit(image_link)
+        html = browser.html
+        soup = BeautifulSoup(html, "html.parser")
+        downloads = soup.find("div", class_="downloads")
+        image_url = downloads.find("a")["href"]
+        mars_hemisphere.append({"title": title, "img_url": image_url})
+        mars_hemisphere.append({"title": title, "img_url": image_url})
+        return mars_hemispheres
     finally:
-        browser.quit()
-
+            browser.quit()
 
 # print(scrape_mars_news())
 # print(scrape_mars_image())
 # print(scrape_mars_weather())
 # print(scrape_mars_facts())
-#print(scrape_mars_hemispheres())
+# print(scrape_mars_hemispheres())
 def return_scrape():
     scrape_mars_news()
     scrape_mars_image()
